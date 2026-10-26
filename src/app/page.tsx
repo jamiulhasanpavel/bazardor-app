@@ -1,69 +1,45 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import { ProductGrid } from "@/components/product-grid";
+import { getProducts, type Product } from "@/lib/products";
+
+function ProductSection({ title, subtitle, products, accent }: { title: string; subtitle?: string; products: Product[]; accent?: string }) {
+  return <section className="content-section">
+    <div className="section-heading"><div><h2>{title}</h2>{subtitle && <p>{subtitle}</p>}</div>{accent && <span className="section-pill">{accent}</span>}</div>
+    <ProductGrid products={products} />
+  </section>;
+}
+
+function SkeletonGrid() {
+  return <div className="product-grid">{Array.from({ length: 8 }, (_, index) => <div className="skeleton-card" key={index}><div className="skeleton skeleton-art" /><div className="skeleton skeleton-line" /><div className="skeleton skeleton-line short" /></div>)}</div>;
+}
 
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getProducts().then(setProducts).finally(() => setLoading(false));
+  }, []);
+
+  const risers = [...products].filter((product) => product.change.dir === "up").sort((a, b) => b.change.pct - a.change.pct).slice(0, 6);
+  const fallers = [...products].filter((product) => product.change.dir === "down").sort((a, b) => a.change.pct - b.change.pct).slice(0, 6);
+
+  return <>
+    <main>
+      <section className="hero container">
+        <div className="hero-copy"><span className="eyebrow"><i /> প্রতিদিনের বাজার, এক নজরে</span><h1>বাজারের সঠিক দাম,<br /><em>সিদ্ধান্ত আপনার।</em></h1><p>বাংলাদেশের নিত্যপ্রয়োজনীয় পণ্যের হালনাগাদ বাজারদর জানুন সহজেই।</p><a href="#সব-পণ্য" className="button hero-cta">আজকের বাজারদর দেখুন <span>↓</span></a><div className="hero-trust"><span>✓</span> বাজারের হালনাগাদ তথ্য · ৮টি বিভাগ</div></div>
+        <div className="hero-visual" aria-label="বাজারের তাজা পণ্য"><div className="hero-orbit orbit-one" /><div className="hero-orbit orbit-two" /><span className="hero-produce produce-rice">🍚</span><span className="hero-produce produce-tomato">🍅</span><span className="hero-produce produce-greens">🥬</span><span className="hero-produce produce-fish">🐟</span><span className="hero-produce produce-onion">🧅</span><div className="hero-sticker">আজকের<br /><b>বাজারদর</b> <span>↓</span></div><div className="hero-caption">তাজা তথ্য, প্রতিদিন</div></div>
+      </section>
+      <div className="container">
+        <section className="market-summary"><div><span className="summary-icon">📍</span><span><strong>বাংলাদেশের বাজার</strong><small>সারা দেশের দৈনিক দামের তুলনা</small></span></div><div className="summary-stat"><strong>৮+</strong><span>বিভাগ</span></div><div className="summary-stat"><strong>{products.length ? `${products.length}+` : "৩৩+"}</strong><span>নিত্যপণ্য</span></div><div className="summary-updated"><span className="live-dot" /> আজকের হালনাগাদ</div></section>
+        {loading ? <div className="content-section"><div className="loading-title skeleton" /><SkeletonGrid /></div> : <>
+          <ProductSection title="আজ দাম বেড়েছে" subtitle="যেসব পণ্যের দাম আজ ঊর্ধ্বমুখী" products={risers} accent="▲ ঊর্ধ্বমুখী" />
+          <ProductSection title="আজ দাম কমেছে" subtitle="যেসব পণ্যে মিলছে স্বস্তির দাম" products={fallers} accent="▼ নিম্নমুখী" />
+          <section id="সব-পণ্য" className="content-section all-products"><div className="section-heading"><div><span className="eyebrow">আজকের বাজার তালিকা</span><h2>সব পণ্য</h2><p>আপনার নিত্যপ্রয়োজনীয় পণ্যের সর্বশেষ দাম এক জায়গায়।</p></div><span className="section-pill">{products.length}টি পণ্য</span></div><ProductGrid products={products} /></section>
+        </>}
+      </div>
+    </main>
+  </>;
 }
