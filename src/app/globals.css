@@ -19,8 +19,8 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 24px; }
-body { margin: 0; background: var(--paper); color: var(--ink); font-family: Arial, "Noto Sans Bengali", "Hind Siliguri", sans-serif; font-size: 15px; line-height: 1.65; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; overflow-x: clip; }
+body { margin: 0; overflow-x: clip; background: var(--paper); color: var(--ink); font-family: Arial, "Noto Sans Bengali", "Hind Siliguri", sans-serif; font-size: 15px; line-height: 1.65; }
 a { color: inherit; text-decoration: none; }
 button, input, select { font: inherit; }
 button, a, select { -webkit-tap-highlight-color: transparent; }
@@ -244,6 +244,78 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
   .empty-page h1 { font-size: 23px; }.empty-page > p:not(.eyebrow) { font-size: 11px; }
   .auth-page { min-height: 68vh; padding: 30px 16px 45px; }.auth-card { padding: 24px 20px; }.auth-card h1 { font-size: 23px; }
   .profile-page { padding-top: 35px; }.profile-page h1 { font-size: 26px; }.profile-card { flex-wrap: wrap; gap: 12px; padding: 15px; }.profile-avatar { width: 48px; height: 48px; }.profile-card > div:nth-child(2) { flex: 1; }.profile-card .button { width: 100%; }
+}
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); gap: 18px; }
+  .hero-copy { padding-left: 12px; }
+  .hero h1 { font-size: clamp(38px, 5.5vw, 54px); }
+  .market-summary { gap: 18px; padding-inline: 18px; }
+  .summary-stat { padding-left: 16px; }
+  .detail-summary { grid-template-columns: 120px minmax(0, 1fr) 170px; gap: 16px; padding: 20px; }
+  .detail-current-price { padding-left: 16px; }
+  .detail-current-price strong { font-size: 30px; }
+}
+@media (max-width: 700px) {
+  html { scroll-padding-top: 16px; }
+  .header-main { grid-template-columns: minmax(0, 1fr) auto; }
+  .brand, .header-actions { min-width: 0; }
+  .category-nav { width: 100%; justify-content: flex-start; padding-bottom: 2px; overscroll-behavior-x: contain; }
+  .nav-link { min-height: 38px; display: inline-flex; align-items: center; }
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .hero-copy { padding-left: 2px; }
+  .market-summary { gap: 10px; }
+  .market-summary > div:first-child { min-width: 0; }
+  .market-summary > div:first-child > span:last-child { min-width: 0; }
+  .market-summary small { overflow-wrap: anywhere; }
+  .summary-updated { white-space: normal; }
+  .section-heading { align-items: flex-start; }
+  .section-heading > div { min-width: 0; }
+  .section-heading p { overflow-wrap: anywhere; }
+  .category-title { min-width: 0; }
+  .category-title > div { min-width: 0; }
+  .sort-control { max-width: 100%; }
+  .sort-control select { min-width: 0; max-width: min(178px, 55vw); }
+  .detail-summary { grid-template-columns: 72px minmax(0, 1fr); }
+  .detail-copy { min-width: 0; }
+  .detail-copy h1, .detail-copy > p:not(.eyebrow) { overflow-wrap: anywhere; }
+  .detail-tags { flex-wrap: wrap; }
+  .price-summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .price-summary-grid > div { min-width: 0; }
+  .price-summary-grid strong { overflow-wrap: anywhere; }
+  .market-table-wrap { max-width: 100%; overscroll-behavior-x: contain; }
+  .auth-page { min-height: 68svh; }
+  .auth-card { min-width: 0; }
+  .auth-form input, .auth-submit, .social-buttons button { min-height: 46px; }
+  .profile-card > div:nth-child(2) { min-width: 0; overflow-wrap: anywhere; }
+  .profile-card .button { min-height: 46px; }
+}
+@media (max-width: 340px) {
+  .container { width: calc(100% - 24px); }
+  .header-main { gap: 4px; }
+  .brand { gap: 6px; }
+  .brand-mark { width: 34px; height: 34px; }
+  .brand strong { font-size: 17px; }
+  .brand small { font-size: 8px; }
+  .header-actions { gap: 5px; font-size: 10px; }
+  .header-actions .button-small { padding-inline: 8px; font-size: 9px; }
+  .profile-link { max-width: 68px; }
+  .product-grid { grid-template-columns: minmax(0, 1fr); }
+  .product-art { height: 130px; }
+  .product-card-body { padding: 13px; }
+  .product-title-row h3 { font-size: 14px; }
+  .price-line > span { font-size: 10px; }
+  .price-line > strong { font-size: 18px; }
+  .change-badge { font-size: 10px; }
+  .price-summary-grid { grid-template-columns: minmax(0, 1fr); }
+  .price-summary-grid > div { padding: 12px 14px; }
+  .price-summary-grid strong { font-size: 19px; }
+  .detail-summary { grid-template-columns: 58px minmax(0, 1fr); gap: 10px; padding: 12px; }
+  .detail-emoji { height: 64px; font-size: 36px; }
+  .detail-copy h1 { font-size: 20px; }
+  .detail-current-price strong { font-size: 23px; }
+  .auth-page { padding-inline: 12px; }
+  .auth-card { padding: 22px 16px; }
+  .empty-page h1 { max-width: 100%; font-size: 21px; overflow-wrap: anywhere; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
