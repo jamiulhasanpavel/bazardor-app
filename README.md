@@ -8,7 +8,7 @@
 - TypeScript
 - Tailwind CSS 4 এবং responsive custom CSS
 - Better Auth (ইমেইল/পাসওয়ার্ড, Google ও GitHub OAuth)
-- PostgreSQL
+- MongoDB Atlas (Better Auth)
 - React Hot Toast
 - Programming Hero BazarDor API; বিকল্প API fallback
 
@@ -23,7 +23,7 @@
 
 ## চালানো
 
-Node.js 20+ এবং PostgreSQL database ব্যবহার করুন।
+Node.js 20.19+ এবং MongoDB database ব্যবহার করুন।
 
 ```bash
 npm install
@@ -31,15 +31,9 @@ Copy-Item .env.example .env.local
 npm run dev
 ```
 
-`.env.local`-এ `DATABASE_URL` ও একটি দীর্ঘ random `BETTER_AUTH_SECRET` বসান। Google/GitHub login চালু করতে সংশ্লিষ্ট OAuth client ID/secret এবং callback URL-ও সেট করুন। OAuth callback URL হবে `https://<your-domain>/api/auth/callback/google` অথবা `/api/auth/callback/github`।
+`.env.local`-এ MongoDB Atlas-এর `DATABASE_URL` এবং একটি দীর্ঘ random `BETTER_AUTH_SECRET` বসান। Connection string-এ database নাম (যেমন `bazardor`) দিন, Atlas-এ আপনার IP/network access অনুমোদন করুন এবং database user-এর read/write permission নিশ্চিত করুন। Better Auth MongoDB adapter প্রয়োজনীয় collection ব্যবহার করে; আলাদা PostgreSQL migration চালাতে হয় না।
 
-Better Auth-এর database schema PostgreSQL-এ তৈরি করুন:
-
-```bash
-npx auth@latest migrate
-```
-
-CLI project-এর Better Auth config থেকে প্রয়োজনীয় core tables তৈরি করে। এটি শুধু trusted local/deployment setup থেকে চালান। Local বা deployed environment-এ auth-এর জন্য PostgreSQL এবং production-এর জন্য নিজস্ব `BETTER_AUTH_SECRET` অবশ্যই প্রয়োজন। OAuth credentials না থাকলেও email/password flow চালু থাকবে।
+Google/GitHub sign-in চালু করতে সংশ্লিষ্ট OAuth application তৈরি করে `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GITHUB_CLIENT_ID` এবং `GITHUB_CLIENT_SECRET` পূরণ করুন। Google ও GitHub OAuth app-এ callback URL হিসেবে যথাক্রমে `http://localhost:3000/api/auth/callback/google` এবং `http://localhost:3000/api/auth/callback/github` যোগ করুন। Production-এ `BETTER_AUTH_URL` ও callback URL-এ আপনার deployed domain ব্যবহার করুন। Client ID/Secret না থাকলে সংশ্লিষ্ট sign-in button নিষ্ক্রিয় থাকবে।
 
 ## API
 
@@ -62,4 +56,4 @@ npm run build
 npm start
 ```
 
-Vercel-এ Next.js project import করে `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` এবং ব্যবহৃত OAuth credentials environment variables হিসেবে যোগ করুন। Database schema আগে apply করুন। Dynamic `/category/[slug]` ও `/product/[slug]` route App Router দ্বারা handle হয় এবং deploy-এর পর refresh করা যায়। এই repository-তে deployment credentials নেই; তাই production deployment provider-এ publish করা এই codebase থেকে করা হয়নি।
+Vercel-এ Next.js project import করে `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` এবং ব্যবহৃত OAuth credentials environment variables হিসেবে যোগ করুন। Atlas-এ deployment-এর outbound connections অনুমোদিত রাখুন। Dynamic `/category/[slug]` ও `/product/[slug]` route App Router দ্বারা handle হয় এবং deploy-এর পর refresh করা যায়। এই repository-তে deployment credentials নেই; তাই production deployment provider-এ publish করা এই codebase থেকে করা হয়নি।

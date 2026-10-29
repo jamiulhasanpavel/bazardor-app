@@ -190,6 +190,7 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
 .social-buttons { display: grid; gap: 8px; }
 .social-buttons button { min-height: 41px; border: 1px solid #e5e9e2; border-radius: 8px; background: #fff; color: #536357; font-size: 11px; cursor: pointer; }
 .social-buttons button:hover { background: #f7f8f4; }
+.social-buttons button:disabled { color: #9aa29a; cursor: not-allowed; opacity: .7; }
 .auth-switch { margin: 17px 0 0; color: #7e8a80; text-align: center; font-size: 11px; }
 .auth-switch a { color: var(--green); font-weight: 700; }
 .auth-skeleton { width: min(100%, 420px); height: 430px; border-radius: 17px; }
